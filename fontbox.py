@@ -22,19 +22,20 @@ class FontBox:
         self.text.grid_rowconfigure(0, weight=1)
         self.text.grid_columnconfigure(0, weight=1)
 
+        self.scroll = tk.Scrollbar(self.window, orient=tk.VERTICAL)
+        self.scroll.pack(side=tk.RIGHT, fill="y")
+
         # Add List Box
-        self.list = tk.Listbox(self.window, selectmode=tk.SINGLE, width=80)
+        self.list = tk.Listbox(self.window, selectmode=tk.SINGLE, width=80, yscrollcommand=self.scroll.set)
         self.list.pack(side=tk.LEFT, fill="both")
 
-        self.scroll = tk.Scrollbar(self.window)
-        self.scroll.pack(side=tk.RIGHT, fill="both")
+        self.scroll.configure(command=self.list.yview)
 
         # Add Fonts
         for f in font.families():
             self.list.insert('end', f)
 
-        self.scroll.configure(command=self.list.yview)
-        self.list.configure(yscrollcommand=self.scroll.set)
+
 
         self.window.mainloop()
 
