@@ -7,7 +7,7 @@ class FontBox:
         self.window = tk.Tk()
         self.window.title('Font')
         self.window.geometry('500x500')
-        self.font = font.Font(family="Helvetica", size=32)
+        self.font = font.Font(root=self.window, family="Helvetica", size=32)
 
         self.frame = tk.Frame(self.window, width=480, height=275)
         self.frame.pack(pady=10)
@@ -18,6 +18,7 @@ class FontBox:
 
         # Add Text box
         self.text = tk.Text(self.frame, font=self.font)
+        self.text.insert(tk.INSERT, "Type Here")
         self.text.grid(row=0, column=0)
         self.text.grid_rowconfigure(0, weight=1)
         self.text.grid_columnconfigure(0, weight=1)
@@ -35,12 +36,17 @@ class FontBox:
         for f in font.families():
             self.list.insert('end', f)
 
+        # Bind the listbox
+        self.list.bind('<ButtonRelease-1>', self.font_chooser)
 
 
         self.window.mainloop()
 
 
-fontbox = FontBox()
+    def font_chooser(self, event):
+        self.font.config(family=self.list.get(self.list.curselection()))
+
+
 
 
 
