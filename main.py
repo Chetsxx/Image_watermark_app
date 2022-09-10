@@ -7,8 +7,6 @@ from PIL import ImageTk, Image
 from fonts import FontBox
 from PIL import ImageGrab
 
-
-
 color = "black"
 
 def UploadAction(event=None):
@@ -26,8 +24,6 @@ def font_chooser():
     global text_on_image
     fontbox = FontBox()
     text_on_image = canvas.create_text(50, 50, text=fontbox.input, font=(fontbox.font_family, fontbox.font_sizing, fontbox.font_styling))
-
-
 
 def start_drawing():
     global color
@@ -48,7 +44,6 @@ def getx_gety(event):
     global lasx, lasy
     lasx, lasy = event.x, event.y
 
-
 def draw(event):
     global lasx, lasy
     global color
@@ -59,9 +54,10 @@ def draw(event):
 def position():
     x_cod = float(x_entry.get())
     y_cod = float(y_entry.get())
+    angles = float(angle_entry.get())
+    canvas.itemconfig(text_on_image, fill=color, angle=angles)
 
     canvas.moveto(text_on_image, x_cod, y_cod)
-
 
 def save_pic():
     global img_name
@@ -69,13 +65,15 @@ def save_pic():
     y = window.winfo_rooty() + canvas.winfo_y()
     x1 = x + canvas.winfo_width()
     y1 = y + canvas.winfo_height()
-    new_name = img_name + 'new_watermarked.jpg'
+
+    try:
+        new_name = img_name + 'new_watermarked.jpg'
+    except NameError:
+        new_name = 'new_watermarked.jpg'
+
     file_location = filedialog.askdirectory(title="Save new images to...")
     image = ImageGrab.grab(bbox=(x, y, x1, y1))
     image.save(f"{file_location}/{new_name}")
-
-
-
 
 window = Tk()
 window.title('Watermarker')
@@ -116,23 +114,23 @@ y_entry = Entry(window)
 y_entry.insert(END, 50)
 y_entry.grid(row=5, column=3, sticky=W)
 
-cords = Button(window, text='Change coordinates', command=position)
-cords.grid(row=6, column=2, sticky=W)
+angle_label = Label(window, text='Angle', font=("bold"))
+angle_label.grid(row=6, column=2, sticky=W)
+
+angle_entry = Entry(window)
+angle_entry.insert(END, 360)
+angle_entry.grid(row=6, column=3, sticky=W)
+
+cords = Button(window, text='Change coordinates and angle', command=position)
+cords.grid(row=7, column=2, sticky=W)
 
 draw = Button(window, text='Pick a color', command=start_drawing)
-draw.grid(row=7, column=2, sticky=W)
+draw.grid(row=8, column=2, sticky=W)
 
 delete_btn = Button(text="Undo Text", command=delete_last)
-delete_btn.grid(row=8, column=2, sticky=W)
-
-delete = Button(text="Clear", command=delete)
-delete.grid(row=9, column=2, sticky=W)
+delete_btn.grid(row=9, column=2, sticky=W)
 
 save = Button(text='Save Image', command=save_pic)
 save.grid(row=10, column=2, sticky=W)
-
-
-
-
 
 window.mainloop()
