@@ -3,7 +3,9 @@ import tkinter as tk
 
 
 class FontBox:
-    def __init__(self):
+    def __init__(self, get_FontBox):
+        # Make get_FontBox accessible in the entire class
+        self.get_FontBox = get_FontBox
         self.root = tk.Tk()
         self.root.title('Font')
         self.root.geometry('500x500')
@@ -11,7 +13,7 @@ class FontBox:
         self.font_family = "Helvetica"
         self.font_sizing = "32"
         self.font_styling = "normal"
-        self.input = None
+        self.input = tk.StringVar()
         # Top Frame
         self.top_frame = tk.Frame(self.root, width=485, height=250)
         self.top_frame.pack(pady=10)
@@ -71,7 +73,6 @@ class FontBox:
 
         self.add = tk.Button(self.bottom_frame, text="Add", command=self.text_box_input)
         self.add.grid(row=2, column=1, pady=10, padx=10, sticky=tk.E)
-
         self.root.mainloop()
 
     def font_chooser(self, event):
@@ -98,5 +99,10 @@ class FontBox:
 
     def text_box_input(self):
         self.input = self.text.get("1.0", 'end-1c')
-        self.root.quit()
+        fontbox_vars = [self.input, self.font_family, self.font_sizing, self.font_styling]
+        self.get_FontBox(fontbox_vars)
+
+
+
+
 

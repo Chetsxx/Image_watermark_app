@@ -21,14 +21,16 @@ def UploadAction(event=None):
     canvas.image = photo
 
 def font_chooser():
+    # Call fontbox and pass in the get_FontBox function as a parameter
+    FontBox(get_FontBox)
+
+def get_FontBox(fontbox):
     global text_on_image
-    fontbox = FontBox()
-    text_on_image = canvas.create_text(50, 50, text=fontbox.input, font=(fontbox.font_family, fontbox.font_sizing, fontbox.font_styling))
+    text_on_image = canvas.create_text(50, 50, text=fontbox[0], font=(fontbox[1], fontbox[2], fontbox[3]))
 
 def start_drawing():
     global color
     color = colorchooser.askcolor()[1]
-
     try:
         canvas.itemconfig(text_on_image, fill=color)
     except NameError:
@@ -56,7 +58,6 @@ def position():
     y_cod = float(y_entry.get())
     angles = float(angle_entry.get())
     canvas.itemconfig(text_on_image, fill=color, angle=angles)
-
     canvas.moveto(text_on_image, x_cod, y_cod)
 
 def save_pic():
